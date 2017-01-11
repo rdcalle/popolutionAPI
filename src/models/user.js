@@ -5,7 +5,7 @@ const moment = require('moment');
 const crypto = require('crypto');
 
 const User = new Schema({
-  username: {
+  email: {
     type: String,
     unique: true,
     required: true
@@ -18,11 +18,11 @@ const User = new Schema({
     type: String,
     required: true
   },
-  created: {
+  created_at: {
     type: Date,
     default: Date.now
   }, 
-  updated: {
+  updated_at: {
     type: Date,
     default: Date.now
   }

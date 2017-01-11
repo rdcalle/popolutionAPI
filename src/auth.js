@@ -5,7 +5,7 @@ const jwtService = require('./services/jwt');
 
 exports.emailSignup = (req, res) => {
     const user = new User({
-        username: req.body.username.toLowerCase(),
+        email: req.body.email.toLowerCase(),
         password: req.body.password
     });
 
@@ -24,10 +24,14 @@ exports.emailSignup = (req, res) => {
 };
 
 exports.emailLogin = (req, res) => {
-    User.findOne({username: req.body.username.toLowerCase()}, (err, user) => {
+    User.findOne({email: req.body.email.toLowerCase()}, (err, user) => {
         // Comprobar si hay errores
         // Si el usuario existe o no
         // Y si la contraseña es correcta
+        if (err || !user)
+            return res
+            .status(401)
+            .send();
         return res
             .status(200)
             .send({token: jwtService.createToken(user)});

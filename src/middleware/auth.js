@@ -24,9 +24,7 @@ exports.ensureAuthenticated = (req, res, next) => {
   }
 
   User.findById(ObjectId(payload.sub),
-    function(err, user) {
-      console.error(err);
-      console.log(user);
+    (err, user) => {
       req.user = user;
       next();
     })
