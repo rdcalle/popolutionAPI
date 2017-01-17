@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');  
 const mongoose = require('mongoose');  
 const cors = require('cors');
+const debug = require('./middleware/debug');
 
 require('./models/user');
 
@@ -12,7 +13,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));  
 app.use(cors());  
 app.set('port', 3000);
- 
+
+app.use(debug.printReq);
 app.use(router);
 
 mongoose.Promise = global.Promise;

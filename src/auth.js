@@ -2,6 +2,8 @@
 const mongoose = require('mongoose');  
 const User = mongoose.model('User');  
 const jwtService = require('./services/jwt');
+const moment = require('moment');
+const config = require('./config');
 
 exports.emailSignup = (req, res) => {
     const user = new User({
@@ -17,8 +19,7 @@ exports.emailSignup = (req, res) => {
       }
       return res
         .status(200)
-        .send({token: jwtService.createToken(user)})
-      
+        .send({token: jwtService.createToken(user)})     
     })
 
 };
@@ -37,3 +38,33 @@ exports.emailLogin = (req, res) => {
             .send({token: jwtService.createToken(user)});
     });
 };
+
+exports.checkToken = (req, res) => {
+  if(!req.headers.authorization) {
+    return res
+      .status(403)
+      .send({message: "Tu petición no tiene cabecera de autorización"});
+  }
+
+  const token = req.headers.authorization;
+  const payload = jwtService.decode(token, config.TOKEN_SECRET);
+
+  if(payload.exp <= moment().unix()) {
+    return res
+    .status(401)
+    .send({message: "El token ha expirado"});
+  }
+  
+  User.findOne({id: payload.sub}, (err, user) => {
+    // Comprobar si hay errores
+    // Si el usuario existe o no
+    // Y si la contraseña es correcta
+    if (err || !user)
+        return res
+        .status(401)
+        .send();
+    return res
+        .status(200)
+        .send({token: jwtService.createToken(user)});
+  });
+}

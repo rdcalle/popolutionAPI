@@ -10,3 +10,7 @@ exports.createToken = (user) => {
   };
   return jwt.encode(payload, config.TOKEN_SECRET);
 };
+
+exports.decode = (token, token_secret) => {
+	return jwt.decode(token, token_secret)
+}
