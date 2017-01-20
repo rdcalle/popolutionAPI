@@ -2,7 +2,8 @@ const express = require('express');
 const bodyParser = require('body-parser');  
 const mongoose = require('mongoose');  
 const cors = require('cors');
-const debug = require('./middleware/debug');
+
+import debug from './middleware/debug';
 
 require('./models/user');
 
@@ -16,6 +17,7 @@ app.set('port', 3000);
 
 app.use(debug.printReq);
 app.use(router);
+
 
 mongoose.Promise = global.Promise;
 
