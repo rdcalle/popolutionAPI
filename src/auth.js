@@ -1,6 +1,7 @@
 // auth.js
 const mongoose = require('mongoose');  
-const User = mongoose.model('User');  
+const User = mongoose.model('User'); 
+const ObjectId = mongoose.Types.ObjectId;
 const jwtService = require('./services/jwt');
 const moment = require('moment');
 const config = require('./config');
@@ -55,7 +56,7 @@ exports.checkToken = (req, res) => {
     .send({message: "El token ha expirado"});
   }
   
-  User.findOne({id: payload.sub}, (err, user) => {
+  User.findOne({_id: new ObjectId(payload.sub)}, (err, user) => {
     // Comprobar si hay errores
     // Si el usuario existe o no
     // Y si la contraseña es correcta
